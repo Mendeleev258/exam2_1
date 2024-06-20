@@ -11,6 +11,13 @@ struct FLIST
 private:
     ptrNODE head, tail;
     size_t size;
+public:
+    FLIST()
+    {
+        tail = head = new NODE(0);
+        size = 0;
+    }
+    ~FLIST();
     void adding_by_pointer(ptrNODE& ptr, TInfo elem)
     {
         ptr = new NODE(elem, ptr);
@@ -23,13 +30,6 @@ private:
         delete p;
         --size;
     }
-public:
-    FLIST()
-    {
-        tail = head = new NODE(0);
-        size = 0;
-    }
-    ~FLIST();
     ptrNODE get_head()
     {
         return head;

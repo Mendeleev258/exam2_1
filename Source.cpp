@@ -81,7 +81,7 @@ void task3(FLIST& list)
 	{
 		if (ptr->info % 3 == 0)
 		{
-			list.add_after(ptr, ptr->info);
+			list.adding_by_pointer(ptr->next, ptr->info);
 			ptr = ptr->next;
 		}
 		ptr = ptr->next;
@@ -103,22 +103,38 @@ ptrNODE findmin(FLIST& list)
 
 void task4(FLIST& list)
 {
-	ptrNODE min = findmin(list);
-	if (min)
+	ptrNODE min_prev = findmin(list);
+	if (min_prev)
 	{
-		ptrNODE tmp = min;
-		ptrNODE tail = list.get_tail();
-		tail = min;
-		min = min->next;
-		tmp = nullptr;
-
+		ptrNODE tail{}, ptr = list.get_head();
+		while (ptr) // tail = list.get_tail();
+		{
+			if (!ptr->next)
+				tail = ptr;
+			ptr = ptr->next;
+		}
+		tail->next = min_prev->next;
+		ptrNODE tmp = min_prev->next;
+		min_prev->next = min_prev->next->next;
+		tmp->next = nullptr;
+		list.set_tail(tmp);
 	}
-	
+}
+
+void task5(ptrNODE startptr, FLIST& newlist, int& cnt)
+{
+	if (startptr)
+	{
+		task5(startptr->next, newlist, cnt);
+		if (cnt % 2 == 0)
+			newlist.adding_by_pointer(newlist.get_head()->next, startptr->info);
+		cnt++;
+	}
 }
 
 int main()
 {
-	 // task 1
+	// task 1
 	/*std::ifstream fmatrix("matrix_1.txt");
 	int n{}, m{};
 	fmatrix >> n >> m;
@@ -143,8 +159,6 @@ int main()
 	/*std::ifstream ftext("text_1.txt");
 	task2(ftext, 2);*/
 
-	
-	
 	// task 3
 	/*std::ifstream fnumbers("numbers_1.txt");
 	FLIST list;
@@ -155,9 +169,20 @@ int main()
 	list.print("");*/
 
 	// task 4
-	std::ifstream fnumbers("numbers_1.txt");
+	/*std::ifstream fnumbers("numbers_1.txt");
 	FLIST list;
 	list.create_by_queue(fnumbers);
 	list.print("");
-	std::cout << findmin(list)->info;
+	task4(list);
+	list.print("");*/
+
+	// task 5 includes 1st member of list (idk why)
+	/*std::ifstream fnumbers("numbers_1.txt");
+	FLIST list;
+	list.create_by_queue(fnumbers);
+	list.print("");
+	FLIST newlist;
+	int cnt = 1;
+	task5(list.get_head(), newlist, cnt);
+	newlist.print("");*/
 }
